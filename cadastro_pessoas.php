@@ -81,16 +81,18 @@
 						type: "post",
 						data: {id: id},
 						success: function(vetor){
+							//console.log(vetor);
 							$("#nome").val(vetor.nome);
 							$("#email").val(vetor.email);
 							$("#salario").val(vetor.salario);
 							$("#cidade").val(vetor.cod_cidade);
+							$("#estado").val(vetor.cod_cidade);
 							if(vetor.sexo == "F"){
-								$("input[name = 'sexo'][value='M']").attr("checked", false);
-								$("input[name = 'sexo'][value='F']").attr("checked", true);
+								$("input[name='sexo'][value='M']").attr("checked", false);
+								$("input[name='sexo'][value='F']").attr("checked", true);
 							}else{
-								$("input[name = 'sexo'][value='F']").attr("checked", false);
-								$("input[name = 'sexo'][value='M']").attr("checked", true);
+								$("input[name='sexo'][value='F']").attr("checked", false);
+								$("input[name='sexo'][value='M']").attr("checked", true);
 							}
 							$(".cadastrar").attr("class","alteracao");
 							$(".alteracao").val("Alterar cadastro");
@@ -102,7 +104,7 @@
 					$.ajax({
 						url: "alteracao_pessoas.php",
 						type: "post",
-						data: {id: id, nome: $("#nome").val(), email: $("#email").val(), sexo: $("input[name='sexo']:checked").val(), salario: $("#salario").val(), cid: $(".id_cid").val()},
+						data: {id:id, nome:$("#nome").val(), email:$("#email").val(), sexo:$("input[name='sexo']:checked").val(), salario:$("#salario").val(), cid:$(".id_cid").val()},
 						success: function(data){
 							if(data==1){
 								$("#msn").html("Cadastro alterado com sucesso!");
@@ -110,6 +112,9 @@
 								$("#nome").val("");
 								$("#email").val("");
 								$("#salario").val("");
+								
+								$("input[name='sexo']").prop("checked", false);
+								
 								$(".alteracao").attr("class", "cadastrar");
 								$(".cadastrar").val("Cadastrar");
 							}else{
@@ -122,7 +127,7 @@
 				$(document).on("click",".nome",function(){
 					td = $(this);
 					nome = td.html();
-					td.html("<input type = 'text' id = 'nome_alterar' name = 'nome' value = '" + nome + "' />");
+					td.html("<input type='text' id='nome_alterar' name='nome' value='" + nome + "' />");
 					td.attr("class", "nome_alterar");
 				});
 				
@@ -132,12 +137,131 @@
 					$.ajax({
 						url: "alterar_coluna.php",
 						type: "post",
-						data: {coluna: 'nome', valor: $("#nome_alterar").val(), id: id_linha},
+						data: {tabela:'cadastrar', coluna:'nome', valor:$("#nome_alterar").val(), id:id_linha},
 						success: function(){
 							nome = $("#nome_alterar").val;
 							td.html(nome);
 							td.attr("class", "nome");
-						},
+						}
+					});
+				});
+				
+				
+				
+				
+				$(document).on("click",".email",function(){
+					td = $(this);
+					email = td.html();
+					td.html("<input type='email' id='email_alterar' name='email' value='" + email + "' />");
+					td.attr("class", "email_alterar");
+				});
+				
+				$(document).on("blur",".email_alterar",function(){
+					td = $(this);
+					id_linha = $(this).closest("tr").find("button").val();
+					$.ajax({
+						url: "alterar_coluna.php",
+						type: "post",
+						data: {tabela:'cadastrar', coluna:'email', valor:$("#email_alterar").val(), id:id_linha},
+						success: function(){
+							email = $("#email_alterar").val;
+							td.html(email);
+							td.attr("class", "email");
+						}
+					});
+				});
+				
+				
+				
+				
+				$(document).on("click",".sexo",function(){
+					td = $(this);
+					sexo = td.html();
+					sexo_input = "<input type='radio' class='alterar_sexo' name='sexo' value='M' /> M";
+					sexo_input += "<input type='radio' class='alterar_sexo' name='sexo' value='F' /> F";
+					td.html(sexo_input);
+					
+					if(sexo=="M"){
+						$(".alterar_sexo[value='M']").prop("checked", true);
+						$(".alterar_sexo[value='F']").prop("checked", false);
+					}else{
+						$(".alterar_sexo[value='M']").prop("checked", false);
+						$(".alterar_sexo[value='F']").prop("checked", true);
+					}
+					td.attr("class","sexo_alterar");
+				});
+					
+				$(document).on("blur",".sexo_alterar",function(){
+					td = $(this);
+					id_linha = $(this).closest("tr").find("button").val();
+					$.ajax({
+						url: "alterar_coluna.php",
+						type: "post",
+						data: {tabela:'cadastrar', coluna:'sexo', valor:$(".alterar_sexo:checked").val(), id:id_linha},
+						success: function(){
+							sexo = $(".alterar_sexo:checked").val;
+							td.html(sexo);
+							td.attr("class", "sexo");
+						}
+					});
+				});
+				
+				
+				
+				
+				$(document).on("click",".salario",function(){
+					td = $(this);
+					salario = td.html();
+					td.html("<input type='number' id='salario_alterar' name='salario' value='" + salario + "' />");
+					td.attr("class", "salario_alterar");
+				});
+				
+				$(document).on("blur",".salario_alterar",function(){
+					td = $(this);
+					id_linha = $(this).closest("tr").find("button").val();
+					$.ajax({
+						url: "alterar_coluna.php",
+						type: "post",
+						data: {tabela:'cadastrar', coluna:'salario', valor:$("#salario_alterar").val(), id:id_linha},
+						success: function(){
+							salario = $("#salario_alterar").val;
+							td.html(salario);
+							td.attr("class", "salario");
+						}
+					});
+				});
+				
+				
+				$(document).on("click",".cidade",function(){
+					td = $(this);
+					cidade = td.html();
+					select = "<select id='cidade_alterar'>";
+					select += $("select[name='cidade']").html();
+					select += "</select>";
+					
+					td.html(select);
+					valor = $("option:contains('"+cidade+"')").val();
+					$("#cod_cidade").val(valor)
+					$("#cod_cidade").focus();
+					td.attr("class","cidade_alterar");
+				});
+				
+				$(document).on("blur",".cidade_alterar",function(){
+					td = $(this);
+					id_linha = $(this).closest("tr").find("button").val();
+					$.ajax({
+						url: "alterar_coluna.php",
+						type: "post",
+						data: {tabela:'cadastro', coluna: 'cod_cidade', valor: $("#cidade_alterar").val(), id: id_linha},
+						success: function(){
+							cod_cidade = $("#cidade_alterar").val();
+							cidade_estado = $("#cidade_alterar").find("option[value='"+ cod_cidade +"']").html();
+							cidade_estado = cidade_estado.split("/");
+							cidade = cidade_estado[0];
+							estado = cidade_estado[1];
+							td.html(cidade);
+							td.attr("class","cidade");
+						}
 					});
 				});
 			});

@@ -4,7 +4,7 @@
 	
 	$p = $_POST["pg"];
 	
-	$sql = "SELECT c.nome as nome, c.email as email, c.sexo as sexo, c.salario as salario, cdd.nome as cidade
+	$sql = "SELECT id_cadastro, c.nome as nome, c.email as email, c.sexo as sexo, c.salario as salario, cdd.nome as cidade
 			FROM cadastro c
 			INNER JOIN cidade cdd
 			ON c.cod_cidade = cdd.id_cidade"; 

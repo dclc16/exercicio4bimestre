@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Nov 06, 2019 at 04:57 PM
+-- Generation Time: Nov 06, 2019 at 07:56 PM
 -- Server version: 5.5.20
 -- PHP Version: 5.3.9
 
@@ -42,10 +42,10 @@ CREATE TABLE IF NOT EXISTS `cadastro` (
 --
 
 INSERT INTO `cadastro` (`id_cadastro`, `nome`, `email`, `sexo`, `cod_cidade`, `salario`) VALUES
-(1, 'Deoclécia', 'deia@gmail.com', 'F', 1, 200),
-(4, 'Aida Quaresma de Sousa', 'aida@gmaiil.com', 'F', 1, 20),
+(1, 'Deoclécia', 'deia@gmail.com', 'F', 1, 40),
+(4, 'Aida ', 'aida@gmaiil.com', 'm', 2, 20),
 (13, 'Amanda Moreira', 'nnda@gmail.com', 'F', 1, 50),
-(14, 'Guilherme Colturato', 'gui@gmail.com', 'M', 1, 5000),
+(14, 'Aida ', 'gui@gmail.com', 'M', 1, 5000),
 (15, 'Jesus Maria José', 'jmj@jj.com', 'M', 1, 10),
 (16, 'Jadson Moreira', 'aj@gmail.com', 'F', 3, 50);
 

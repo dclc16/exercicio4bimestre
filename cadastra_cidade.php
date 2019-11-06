@@ -35,7 +35,7 @@
 						data: {id: id},
 						success: function(vetor){
 							$("#nome_cidade").val(vetor.nome);
-							//
+							$("select[nome='estado']").val(vetor.cod_estado);
 							
 							$(".cadastrar").attr("class","alteracao");
 							$(".alteracao").val("Alterar cadastro");
@@ -53,8 +53,8 @@
 							for(i=0;i<matriz.length;i++){
 								console.log(matriz);
 								linha = "<tr>";
-								linha += "<td class = 'nome'>" + matriz[i].nome_cid + "</td>";
-								linha += "<td class = 'estado'>" + matriz[i].nome_est + "</td>";
+								linha += "<td class='nome'>" + matriz[i].nome_cid + "</td>";
+								linha += "<td class='estado'>" + matriz[i].nome_est + "</td>";
 								linha += "<td><button type='button' class='alterar' value='" + matriz[i].id_cidade + "'>Alterar</button> | <button type='button' class='remover' value='" + matriz[i].id_cidade + "'>Remover</button></td>";
 								linha += "</tr>";
 								
@@ -85,6 +85,28 @@
 							}else{
 								$("#msg").html("Não foi possível alterar o cadastro desta cidade!");
 							}
+						}
+					});
+				});
+				
+				$(document).on("click",".nome",function(){
+					td = $(this);
+					nome = td.html();
+					td.html("<input type='text' id='nome_alterar' name='nome' value = '" + nome + "' />");
+					td.attr("class", "nome_alterar");
+				});
+				
+				$(document).on("blur",".nome_alterar",function(){
+					td = $(this);
+					id_linha = $(this).closest("tr").find("button").val();
+					$.ajax({
+						url: "alterar_coluna.php",
+						type: "post",
+						data: {coluna:'nome', valor: $("#nome_alterar").val(), id: id_linha},
+						success: function(){
+							nome = $("#nome_alterar").val;
+							td.html(nome);
+							td.attr("class", "nome");
 						}
 					});
 				});

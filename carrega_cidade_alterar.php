@@ -5,7 +5,7 @@
 	
 	$id = $_POST["id"];
 	
-	$sql = "SELECT *FROM cadastro WHERE id_cidade = '$id'";
+	$sql = "SELECT *FROM cidade WHERE id_cidade = '$id'";
 	
 	$resultado = mysqli_query($conexao,$sql);
 	

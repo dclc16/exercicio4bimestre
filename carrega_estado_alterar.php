@@ -5,7 +5,7 @@
 	
 	$id = $_POST["id"];
 	
-	$sql = "SELECT *FROM estado WHERE id_estado = '$id'";
+	$sql = "SELECT * FROM estado WHERE id_estado = '$id'";
 	
 	$resultado = mysqli_query($conexao,$sql);
 	

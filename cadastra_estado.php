@@ -8,11 +8,12 @@
 		<script>
 			var id = null;
 			$(document).ready(function(){
+				paginacao(0);
 				$("#cad").click(function(){
 					$.ajax({
 						url: "insere_estado.php",
 						type: "post",
-						data: {nome: $("#nome_est").val(), uf: $("#uf").val()},
+						data: {nome:$("#nome_est").val(), uf:$("#uf").val()},
 						success: function(data){
 							if(data==1){
 								$("#msg").html("Cadastro realizado com sucesso!");
@@ -33,7 +34,7 @@
 						data: {id: id},
 						success: function(vetor){
 							$("#nome_est").val(vetor.nome);
-							$("#uf").val(vetor.uf);
+							$("#uf").val(vetor.UF);
 			
 							$(".cadastrar").attr("class","alteracao");
 							$(".alteracao").val("Alterar cadastro");
@@ -49,10 +50,9 @@
 						success: function(matriz){
 							$("#tb").html("");
 							for(i=0;i<matriz.length;i++){
-								console.log(matriz);
 								linha = "<tr>";
-								linha += "<td class = 'nome'>" + matriz[i].nome + "</td>";
-								linha += "<td class = 'uf'>" + matriz[i].UF + "</td>";
+								linha += "<td class='nome'>" + matriz[i].nome + "</td>";
+								linha += "<td class='uf'>" + matriz[i].UF + "</td>";
 								linha += "<td><button type='button' class='alterar' value='" + matriz[i].id_estado + "'>Alterar</button> | <button type='button' class='remover' value='" + matriz[i].id_estado + "'>Remover</button></td>";
 								linha += "</tr>";
 								
@@ -84,6 +84,50 @@
 								$("#msg").html("Não foi possível alterar o cadastro deste estado!");
 							}
 						}
+					});
+				});
+				
+				$(document).on("click",".nome",function(){
+					td = $(this);
+					nome = td.html();
+					td.html("<input type='text' id='nome_alterar' name='nome' value='" + nome + "' />");
+					td.attr("class","nome_alterar");
+				});
+				
+				$(document).on("blur",".nome_alterar",function(){
+					td = $(this);
+					id_linha = $(this).closest("tr").find("button").val();
+					$.ajax({
+						url: "alterar_coluna.php",
+						type: "post",
+						data: {tabela:'estado', coluna:'nome', valor:$("#nome_alterar").val(), id:id_linha},
+						success: function(){
+							nome = $("#nome_alterar").val;
+							td.html(nome);
+							td.attr("class","nome");
+						},
+					});
+				});
+				
+				$(document).on("click",".uf",function(){
+					td = $(this);
+					uf = td.html();
+					td.html("<input type='text' id='uf_alterar' name='uf' value='" + uf + "' />");
+					td.attr("class","uf_alterar");
+				});
+				
+				$(document).on("blur",".uf_alterar",function(){
+					td = $(this);
+					id_linha = $(this).closest("tr").find("button").val();
+					$.ajax({
+						url: "alterar_coluna.php",
+						type: "post",
+						data: {tabela:'estado', coluna:'UF', valor:$("#uf_alterar").val(), id:id_linha},
+						success: function(){
+							uf = $("#uf_alterar").val;
+							td.html(uf);
+							td.attr("class","uf");
+						},
 					});
 				});
 			});
